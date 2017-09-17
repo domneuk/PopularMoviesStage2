@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="@string/title_sort_by" />
-    <group
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/action_sort_popular"
-            android:checked="true"
-            android:enabled="false"
-            android:orderInCategory="1"
-            android:title="@string/title_sort_by_popular" />
-        <item
-            android:id="@+id/action_sort_toprated"
-            android:checked="false"
-            android:enabled="true"
-            android:orderInCategory="2"
-            android:title="@string/title_sort_by_toprated" />
-    </group>
+        android:id="@+id/action_sort_popular"
+        android:enabled="false"
+        android:orderInCategory="1"
+        android:title="@string/title_sort_by_popular" />
+    <item
+        android:id="@+id/action_sort_toprated"
+        android:enabled="true"
+        android:orderInCategory="2"
+        android:title="@string/title_sort_by_toprated" />
+
+    <item
+        android:id="@+id/action_favorites"
+        android:enabled="false"
+        android:title="@string/title_show_favorites"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
 </menu>
