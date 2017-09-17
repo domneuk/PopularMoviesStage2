@@ -20,6 +20,8 @@ public final class NetworkUtils {
 
     private final static String API_ENDPOINT_TOP_RATED = "top_rated";
     private final static String API_ENDPOINT_POPULAR = "popular";
+    private final static String API_ENDPOINT_TRAILERS = "videos";
+    private final static String API_ENDPOINT_REVIEWS = "reviews";
 
     private final static String API_KEY_PARAM = "api_key";
     private final static String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
@@ -34,6 +36,14 @@ public final class NetworkUtils {
 
     public static final String SORTING_TOP_RATED = "TOP_RATED";
     public static final String SORTING_POPULAR = "POPULAR";
+
+    private static final String BASE_YOUTUBE_VIDEO_URL = "https://www.youtube.com";
+    private static final String BASE_YOUTUBE_IMAGE_URL = "https://img.youtube.com";
+
+    private static final String YOUTUBE_VIDEO_PATH = "watch";
+    private static final String YOUTUBE_VIDEO_QUERY_PARAM = "v";
+    private static final String YOUTUBE_IMAGE_PATH = "vi";
+    private static final String YOUTUBE_IMAGE_ENDING = "0.jpg";
 
     public static URL buildUrl(String sorting) {
         String endpoint;
@@ -70,6 +80,21 @@ public final class NetworkUtils {
                 .appendQueryParameter(API_LANGUAGE_PARAM, API_LANGUAGE)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
+    }
+
+    public static String buildYoutubeVideoUrl(String videoKey) {
+        return Uri.parse(BASE_YOUTUBE_VIDEO_URL).buildUpon()
+                .appendPath(YOUTUBE_VIDEO_PATH)
+                .appendQueryParameter(YOUTUBE_VIDEO_QUERY_PARAM, videoKey)
+                .build().toString();
+    }
+
+    public static String buildYoutubeImageUrl(String videoKey) {
+        return Uri.parse(BASE_YOUTUBE_IMAGE_URL).buildUpon()
+                .appendEncodedPath(YOUTUBE_IMAGE_PATH)
+                .appendEncodedPath(videoKey)
+                .appendEncodedPath(YOUTUBE_IMAGE_ENDING)
+                .build().toString();
     }
 
     public static Uri buildPosterUri(String imageUri) {
