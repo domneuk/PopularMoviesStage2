@@ -3,7 +3,7 @@
     <string name="error_message">Error occurred. Please try again.</string>
     <string name="title_sort_by_toprated">Top Rated</string>
     <string name="title_sort_by_popular">Popular</string>
-    <string name="title_sort_by">Sort by …</string>
+    <string name="title_show_favorites">Favorites</string>
     <string name="original_language">Original Language</string>
     <string name="user_rating">User Rating</string>
     <string name="release_date">Release Date</string>
@@ -12,4 +12,6 @@
     <string name="original_title">Original Title</string>
     <string name="movie_poster">Movie poster</string>
     <string name="movie_poster_description">Movie poster</string>
+    <string name="no_trailers">No trailers</string>
+    <string name="no_reviews">No reviews</string>
 </resources>
