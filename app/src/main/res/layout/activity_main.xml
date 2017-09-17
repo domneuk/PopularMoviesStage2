@@ -5,15 +5,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.popularmovies.MainActivity">
 
-    <GridView
-        android:id="@+id/gv_movie_overview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movie_overview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="185dp"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth" />
-
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/tv_error_message_display"

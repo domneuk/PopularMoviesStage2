@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="@dimen/movie_overview_item_image_height">
 
     <ImageView
         android:id="@+id/iv_movie_poster"
         android:layout_width="match_parent"
-        android:layout_height="185dp"
+        android:layout_height="match_parent"
         android:contentDescription="@string/movie_poster_description"
         android:scaleType="centerCrop" />
 
-</LinearLayout>
+</FrameLayout>
