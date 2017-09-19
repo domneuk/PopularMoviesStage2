@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mMovieOverview = (RecyclerView) findViewById(R.id.rv_movie_overview);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey(BUNDLE_ID)) {
+        if (savedInstanceState == null) {
             loaderId = MOVIE_POPULAR_LOADER_ID;
-            getSupportLoaderManager().initLoader(MOVIE_POPULAR_LOADER_ID, null, this);
+            getSupportLoaderManager().initLoader(loaderId, null, this);
         }
 
         int spanCount = 2;
@@ -91,19 +92,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        item.setEnabled(false);
         switch (item.getItemId()) {
             case R.id.action_sort_toprated:
-                item.setEnabled(false);
                 mActionSortPopular.setEnabled(true);
-
+                mActionFavorites.setEnabled(true);
                 loaderId = MOVIE_TOPRATED_LOADER_ID;
                 getSupportActionBar().setTitle(getString(R.string.title_sort_by_toprated));
                 getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
                 break;
             case R.id.action_sort_popular:
-                item.setEnabled(false);
                 mActionSortTopRated.setEnabled(true);
-
+                mActionFavorites.setEnabled(true);
                 loaderId = MOVIE_POPULAR_LOADER_ID;
                 getSupportActionBar().setTitle(getString(R.string.title_sort_by_popular));
                 getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
