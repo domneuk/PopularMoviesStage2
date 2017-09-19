@@ -28,7 +28,7 @@ public class MovieProvider extends ContentProvider {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         matcher.addURI(CONTENT_AUTHORITY, MovieContract.PATH_MOVIES, MOVIE);
-        matcher.addURI(CONTENT_AUTHORITY, MovieContract.PATH_MOVIES + "?/#", MOVIE_ID);
+        matcher.addURI(CONTENT_AUTHORITY, MovieContract.PATH_MOVIES + "/#", MOVIE_ID);
 
         return matcher;
     }
@@ -144,7 +144,6 @@ public class MovieProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case MOVIE_ID:
-
                 String movieId = uri.getLastPathSegment();
                 String selection = MovieEntry.COLUMN_MOVIE_ID + " = ?";
                 String[] selectionArgs = new String[]{movieId};
