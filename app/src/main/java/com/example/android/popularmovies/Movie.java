@@ -1,7 +1,10 @@
 package com.example.android.popularmovies;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.android.popularmovies.data.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,6 +77,19 @@ public class Movie implements Parcelable {
         this.originalLanguage = in.readString();
         this.userRating = in.readDouble();
         this.releaseDate = new Date(in.readLong());
+    }
+
+    public Movie(Cursor in, int position) {
+        in.moveToPosition(position);
+
+        this.id = in.getLong(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_ID));
+        this.title = in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE));
+        this.originalTitle = in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE));
+        this.originalLanguage = in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE));
+        this.posterUri = in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URI));
+        this.plotSynopsis = in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_SYNOPSIS));
+        this.userRating = in.getDouble(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_USER_RATING));
+        this.releaseDate = new Date(in.getString(in.getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE)));
     }
 
     @Override

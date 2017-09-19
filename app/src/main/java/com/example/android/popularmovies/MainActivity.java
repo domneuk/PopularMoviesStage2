@@ -1,42 +1,59 @@
 package com.example.android.popularmovies;
 
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.database.Cursor;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.android.popularmovies.utilities.AsyncTaskHelper;
-import com.example.android.popularmovies.utilities.FetchMovieDataTask;
+import com.example.android.popularmovies.data.MovieContract;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private GridView mMovieOverview;
-    private MovieAdapter mMovieAdapter;
-
-    private TextView mErrorMessageDisplay;
+    private RecyclerView mMovieOverview;
     private ProgressBar mLoadingIndicator;
 
     private MenuItem mActionSortPopular;
     private MenuItem mActionSortTopRated;
+    private MenuItem mActionFavorites;
+
+    private static final String BUNDLE_ID = "loaderId";
+
+    private int loaderId;
+
+    public static final int MOVIE_POPULAR_LOADER_ID = 1;
+    public static final int MOVIE_TOPRATED_LOADER_ID = 2;
+    public static final int MOVIE_FAVORITE_LOADER_ID = 3;
+
+    public static final String INTENT_MOVIE = "movie";
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", (ArrayList<Movie>) mMovieAdapter.getMovieData());
+        outState.putInt(BUNDLE_ID, loaderId);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_ID)) {
+            loaderId = savedInstanceState.getInt(BUNDLE_ID);
+            getSupportLoaderManager().initLoader(loaderId, null, this);
+        }
     }
 
     @Override
@@ -44,36 +61,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMovieOverview = (GridView) findViewById(R.id.gv_movie_overview);
-
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
+        mMovieOverview = (RecyclerView) findViewById(R.id.rv_movie_overview);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-            mMovieAdapter = new MovieAdapter(this, null);
-        } else {
-            List<Movie> movies = savedInstanceState.getParcelableArrayList("movies");
-            mMovieAdapter = new MovieAdapter(this, movies);
+        if (savedInstanceState == null || !savedInstanceState.containsKey(BUNDLE_ID)) {
+            loaderId = MOVIE_POPULAR_LOADER_ID;
+            getSupportLoaderManager().initLoader(MOVIE_POPULAR_LOADER_ID, null, this);
         }
 
-        mMovieOverview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        int spanCount = 2;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spanCount = 3;
+        }
 
-                Movie selectedMovie = mMovieAdapter.getItem(i);
-
-                if (selectedMovie != null) {
-                    Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
-                    intent.putExtra("movie", selectedMovie);
-
-                    // sendIntent with parcable as extra
-                    startActivity(intent);
-                } else
-                    Log.d(TAG, "Could not get movie from list!");
-            }
-        });
-
-        loadMovieData(NetworkUtils.SORTING_POPULAR); // Initially get all popular movies
+        mMovieOverview.setLayoutManager(new GridLayoutManager(this, spanCount));
     }
 
     @Override
@@ -83,62 +84,86 @@ public class MainActivity extends AppCompatActivity {
 
         mActionSortPopular = menu.findItem(R.id.action_sort_popular);
         mActionSortTopRated = menu.findItem(R.id.action_sort_toprated);
+        mActionFavorites = menu.findItem(R.id.action_favorites);
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        item.setChecked(true);
-        item.setEnabled(false);
-
         switch (item.getItemId()) {
             case R.id.action_sort_toprated:
+                item.setEnabled(false);
                 mActionSortPopular.setEnabled(true);
-                mActionSortPopular.setChecked(false);
-                mMovieAdapter.setMovieData(null);
-                loadMovieData(NetworkUtils.SORTING_TOP_RATED);
-                return true;
+
+                loaderId = MOVIE_TOPRATED_LOADER_ID;
+                getSupportActionBar().setTitle(getString(R.string.title_sort_by_toprated));
+                getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
+                break;
             case R.id.action_sort_popular:
+                item.setEnabled(false);
                 mActionSortTopRated.setEnabled(true);
-                mActionSortTopRated.setChecked(false);
-                mMovieAdapter.setMovieData(null);
-                loadMovieData(NetworkUtils.SORTING_POPULAR);
-                return true;
+
+                loaderId = MOVIE_POPULAR_LOADER_ID;
+                getSupportActionBar().setTitle(getString(R.string.title_sort_by_popular));
+                getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
+                break;
+            case R.id.action_favorites:
+                loaderId = MOVIE_FAVORITE_LOADER_ID;
+                mActionSortPopular.setEnabled(true);
+                mActionSortTopRated.setEnabled(true);
+                getSupportActionBar().setTitle(getString(R.string.title_show_favorites));
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+        getSupportLoaderManager().initLoader(loaderId, null, this);
+
+        return true;
     }
 
-    public class FetchMovieDataTaskCompleteListener implements AsyncTaskHelper.AsyncTaskCompleteListener<List<Movie>> {
-        @Override
-        public void onTaskComplete(List<Movie> movies) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (movies != null) {
-                mMovieAdapter.setMovieData(movies);
-                mMovieOverview.setAdapter(mMovieAdapter);
-                showGridView();
-            } else {
-                showErrorMessage();
-            }
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+
+        if (id == MOVIE_POPULAR_LOADER_ID || id == MOVIE_TOPRATED_LOADER_ID) {
+            String sorting = id == MOVIE_TOPRATED_LOADER_ID ? NetworkUtils.SORTING_TOP_RATED : NetworkUtils.SORTING_POPULAR;
+            return new MovieLoader(this, sorting);
+        } else if (id == MOVIE_FAVORITE_LOADER_ID) {
+            String[] projection = new String[]{
+                    MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_TITLE,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_USER_RATING,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_SYNOPSIS,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URI
+            };
+            return new CursorLoader(this, MovieContract.MovieEntry.CONTENT_URI, projection, null, null, null);
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+        int loaderId = loader.getId();
+
+        if (loaderId == MOVIE_POPULAR_LOADER_ID || loaderId == MOVIE_TOPRATED_LOADER_ID) {
+            MovieAdapter movieAdapter = new MovieAdapter(this, (List<Movie>) data);
+            mMovieOverview.setAdapter(movieAdapter);
+        } else if (loaderId == MOVIE_FAVORITE_LOADER_ID) {
+            FavoriteAdapter favoriteAdapter = new FavoriteAdapter(this);
+            mMovieOverview.setAdapter(favoriteAdapter);
+            favoriteAdapter.setCursor((Cursor) data);
         }
     }
 
-    private void loadMovieData(String sort) {
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-        showGridView();
-        new FetchMovieDataTask(this, new FetchMovieDataTaskCompleteListener()).execute(sort);
+    @Override
+    public void onLoaderReset(Loader loader) {
+        mMovieOverview.setAdapter(null);
     }
 
-    private void showGridView() {
-        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        mMovieOverview.setVisibility(View.VISIBLE);
-    }
-
-    private void showErrorMessage() {
-        mMovieOverview.setVisibility(View.INVISIBLE);
-        mErrorMessageDisplay.setVisibility(View.VISIBLE);
-    }
 }
