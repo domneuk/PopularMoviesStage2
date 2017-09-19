@@ -1,11 +1,6 @@
-# PopularMoviesStage1
+# PopularMoviesStage2
 
-This is the repository for the first stage of my first project "Popular Movies App" of the Android Developer Fast Track.
-
-For some reasons I didn't created the repository earlier. So there the first commit is the nearly finished app.
- 
- - **23.08.2017** - Changes after first review
- - **22.08.2017** - Initial commit
+This is the repository for the second stage of my project "Popular Movies App" of the Android Developer Fast Track.
 
 ## IMPORTANT NOTE RUNNING THIS APP
 
