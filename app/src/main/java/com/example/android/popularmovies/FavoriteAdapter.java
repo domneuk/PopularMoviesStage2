@@ -24,7 +24,7 @@ class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     @Override
     public FavoriteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.movie_overview_item, null);
+        View view = inflater.inflate(R.layout.movie_overview_item, parent, false);
         return new FavoriteAdapter.ViewHolder(view);
     }
 

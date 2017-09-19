@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/action_favorites"
-        android:enabled="false"
+        android:enabled="true"
         android:title="@string/title_show_favorites"
         android:orderInCategory="3"
         app:showAsAction="never" />
