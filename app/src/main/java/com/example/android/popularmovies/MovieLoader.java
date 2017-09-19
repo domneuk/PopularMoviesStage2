@@ -1,7 +1,7 @@
 package com.example.android.popularmovies;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.android.popularmovies.utilities.MovieApiUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
