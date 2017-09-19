@@ -2,8 +2,12 @@ package com.example.android.popularmovies;
 
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Trailer {
     private String id;
@@ -60,5 +64,17 @@ public class Trailer {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public static List<Trailer> fromJson(JSONArray trailerList) {
+        List<Trailer> trailers = new ArrayList<>();
+        for (int i = 0; i < trailerList.length(); i++) {
+            try {
+                trailers.add(new Trailer(trailerList.getJSONObject(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return trailers;
     }
 }
