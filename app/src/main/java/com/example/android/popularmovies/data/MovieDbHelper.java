@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MovieDbHelper extends SQLiteOpenHelper {
 
         private static final String DATABASE_NAME = "movies.db";
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 2;
 
 
         public MovieDbHelper(Context context) {
@@ -23,9 +23,11 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                             + MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                             + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, "
                             + MovieContract.MovieEntry.COLUMN_MOVIE_TITLE + " TEXT NOT NULL, "
+                            + MovieContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE + " TEXT NOT NULL, "
+                            + MovieContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_LANGUAGE + " TEXT NOT NULL, "
                             + MovieContract.MovieEntry.COLUMN_MOVIE_USER_RATING + " TEXT NUT NULL DEFAULT 0, "
                             + MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, "
-                            + MovieContract.MovieEntry.COLUMN_MOVIE_PLOT_SYNOPSIS + " TEXT NOT NULL, "
+                            + MovieContract.MovieEntry.COLUMN_MOVIE_SYNOPSIS + " TEXT NOT NULL, "
                             + MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URI + " TEXT NOT NULL)";
 
             db.execSQL(CREATE_MOVIES_TABLE);
