@@ -50,6 +50,10 @@ public class Trailer {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getVideoUrl() {
         return videoUrl;
     }

@@ -15,7 +15,7 @@ public class ReviewLoader extends AsyncTaskLoader<List<Review>> {
     private static final String TAG = ReviewLoader.class.getSimpleName();
 
     private List<Review> reviews;
-    private String movieId;
+    private final String movieId;
 
     public ReviewLoader(Context context, String movieId) {
         super(context);

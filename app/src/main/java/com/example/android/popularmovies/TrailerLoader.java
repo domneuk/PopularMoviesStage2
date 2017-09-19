@@ -15,7 +15,7 @@ public class TrailerLoader extends AsyncTaskLoader<List<Trailer>> {
     private static final String TAG = TrailerLoader.class.getSimpleName();
 
     private List<Trailer> trailers;
-    private String movieId;
+    private final String movieId;
 
     public TrailerLoader(Context context, String movieId) {
         super(context);

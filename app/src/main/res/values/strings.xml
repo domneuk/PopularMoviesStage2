@@ -19,4 +19,5 @@
     <string name="reviews_lbl">Reviews</string>
     <string name="no_apps_trailer">No apps for playing Youtube videos installed!</string>
     <string name="no_apps_review">No apps for showing MovieDB review installed!</string>
+    <string name="trailer_contentDescription">Trailer: %1$s</string>
 </resources>

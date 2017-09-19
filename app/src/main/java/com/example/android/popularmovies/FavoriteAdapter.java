@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private Cursor mCursor;
 
     public FavoriteAdapter(Context context) {
@@ -43,7 +43,7 @@ class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView posterView;
+        private final ImageView posterView;
         private Movie movie;
 
         public ViewHolder(View itemView) {

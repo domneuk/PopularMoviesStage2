@@ -37,9 +37,6 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
     private static final int MOVIE_DETAIL_TRAILER_LOADER_ID = 10;
     private static final int MOVIE_DETAIL_REVIEW_LOADER_ID = 11;
 
-    private TrailerAdapter trailerAdapter;
-    private ReviewAdapter reviewAdapter;
-
     private Movie selectedMovie;
     private String movieId;
     private Boolean isFavorite;
@@ -49,8 +46,6 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
 
     private FloatingActionButton floatingActionButton;
 
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,22 +54,22 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
-        ImageView imageView = (ImageView) findViewById(R.id.iv_movie_poster);
-        TextView titleView = (TextView) findViewById(R.id.tv_title);
-        TextView originalTitleView = (TextView) findViewById(R.id.tv_original_title);
-        TextView originalLanguageView = (TextView) findViewById(R.id.tv_original_language);
-        RatingBar userRatingBar = (RatingBar) findViewById(R.id.rb_user_rating);
+        ImageView imageView = findViewById(R.id.iv_movie_poster);
+        TextView titleView = findViewById(R.id.tv_title);
+        TextView originalTitleView = findViewById(R.id.tv_original_title);
+        TextView originalLanguageView = findViewById(R.id.tv_original_language);
+        RatingBar userRatingBar = findViewById(R.id.rb_user_rating);
         userRatingBar.setNumStars(NUM_IMBD_RATING_STARS);
-        TextView releaseDateView = (TextView) findViewById(R.id.tv_release_date);
-        TextView plotSynopsisView = (TextView) findViewById(R.id.tv_plot_synopsis);
+        TextView releaseDateView = findViewById(R.id.tv_release_date);
+        TextView plotSynopsisView = findViewById(R.id.tv_plot_synopsis);
 
-        trailerRecyclerView = (RecyclerView) findViewById(R.id.rv_trailer);
-        reviewRecyclerView = (RecyclerView) findViewById(R.id.rv_review);
+        trailerRecyclerView = findViewById(R.id.rv_trailer);
+        reviewRecyclerView = findViewById(R.id.rv_review);
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,12 +109,12 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
                 plotSynopsisView.setText(selectedMovie.getPlotSynopsis());
 
                 getSupportLoaderManager().initLoader(MOVIE_DETAIL_TRAILER_LOADER_ID, null, this);
-                trailerAdapter = new TrailerAdapter(this, null);
+                TrailerAdapter trailerAdapter = new TrailerAdapter(this, null);
                 trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 trailerRecyclerView.setAdapter(trailerAdapter);
 
                 getSupportLoaderManager().initLoader(MOVIE_DETAIL_REVIEW_LOADER_ID, null, this);
-                reviewAdapter = new ReviewAdapter(this, null);
+                ReviewAdapter reviewAdapter = new ReviewAdapter(this, null);
                 reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 reviewRecyclerView.setAdapter(reviewAdapter);
             } else
@@ -138,6 +133,7 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onLoadFinished(Loader loader, Object data) {
         int id = loader.getId();

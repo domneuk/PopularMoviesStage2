@@ -18,8 +18,8 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
 
-    private Context mContext;
-    private List<Movie> mMovieList;
+    private final Context mContext;
+    private final List<Movie> mMovieList;
 
     public MovieAdapter(Activity context, List<Movie> movies) {
         this.mContext = context;
@@ -50,7 +50,7 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView posterView;
+        private final ImageView posterView;
         private Movie movie;
 
         public ViewHolder(View itemView) {

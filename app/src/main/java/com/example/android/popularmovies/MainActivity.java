@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -62,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMovieOverview = (RecyclerView) findViewById(R.id.rv_movie_overview);
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mMovieOverview = findViewById(R.id.rv_movie_overview);
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
         if (savedInstanceState == null) {
             loaderId = MOVIE_POPULAR_LOADER_ID;
@@ -93,31 +92,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setEnabled(false);
+
+        String newTitle;
+
         switch (item.getItemId()) {
             case R.id.action_sort_toprated:
                 mActionSortPopular.setEnabled(true);
                 mActionFavorites.setEnabled(true);
                 loaderId = MOVIE_TOPRATED_LOADER_ID;
-                getSupportActionBar().setTitle(getString(R.string.title_sort_by_toprated));
+                newTitle = getString(R.string.title_sort_by_toprated);
                 getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
                 break;
             case R.id.action_sort_popular:
                 mActionSortTopRated.setEnabled(true);
                 mActionFavorites.setEnabled(true);
                 loaderId = MOVIE_POPULAR_LOADER_ID;
-                getSupportActionBar().setTitle(getString(R.string.title_sort_by_popular));
+                newTitle = getString(R.string.title_sort_by_popular);
                 getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER_ID);
                 break;
             case R.id.action_favorites:
                 loaderId = MOVIE_FAVORITE_LOADER_ID;
                 mActionSortPopular.setEnabled(true);
                 mActionSortTopRated.setEnabled(true);
-                getSupportActionBar().setTitle(getString(R.string.title_show_favorites));
+                newTitle = getString(R.string.title_show_favorites);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+        getSupportActionBar().setTitle(newTitle);
         getSupportLoaderManager().initLoader(loaderId, null, this);
 
         return true;
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onLoadFinished(Loader loader, Object data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);

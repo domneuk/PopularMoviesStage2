@@ -21,7 +21,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
 
     private static final String TAG = TrailerAdapter.class.getSimpleName();
 
-    private Context mContext;
+    private final Context mContext;
     private List<Trailer> mTrailerList;
 
     public TrailerAdapter(Activity context, List<Trailer> trailers) {
@@ -40,6 +40,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Trailer trailer = mTrailerList.get(position);
 
+        holder.trailerImage.setContentDescription(mContext.getString(R.string.trailer_contentDescription, trailer.getName()));
         Picasso.with(mContext)
                 .load(trailer.getImageUrl())
                 .into(holder.trailerImage);
@@ -53,7 +54,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView trailerImage;
+        private final ImageView trailerImage;
         private Trailer trailer;
 
         public ViewHolder(View itemView) {
