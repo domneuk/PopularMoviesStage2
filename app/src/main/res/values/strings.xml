@@ -14,4 +14,7 @@
     <string name="movie_poster_description">Movie poster</string>
     <string name="no_trailers">No trailers</string>
     <string name="no_reviews">No reviews</string>
+    <string name="content_divider">Content divider</string>
+    <string name="trailers_lbl">Trailers</string>
+    <string name="reviews_lbl">Reviews</string>
 </resources>
