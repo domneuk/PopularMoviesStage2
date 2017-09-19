@@ -27,7 +27,7 @@ public final class NetworkUtils {
     private final static String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
 
     private final static String API_LANGUAGE_PARAM = "language";
-    private final static String API_LANGUAGE = "de-DE";
+    private final static String API_LANGUAGE = "en-US";
 
     private final static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private final static String DEFAULT_IMAGE_SIZE = "w185";
@@ -77,6 +77,50 @@ public final class NetworkUtils {
             endpoint = API_ENDPOINT_POPULAR;
         }
         return Uri.parse(API_BASE_URL + endpoint).buildUpon()
+                .appendQueryParameter(API_LANGUAGE_PARAM, API_LANGUAGE)
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build();
+    }
+
+    public static URL buildTrailerUrl(String movieId) {
+        Uri builtUri = buildTrailerUri(movieId);
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static Uri buildTrailerUri(String movieId) {
+        return Uri.parse(API_BASE_URL).buildUpon()
+                .appendEncodedPath(movieId)
+                .appendEncodedPath(API_ENDPOINT_TRAILERS)
+                .appendQueryParameter(API_LANGUAGE_PARAM, API_LANGUAGE)
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build();
+    }
+
+    public static URL buildReviewUrl(String movieId) {
+        Uri builtUri = buildReviewUri(movieId);
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static Uri buildReviewUri(String movieId) {
+        return Uri.parse(API_BASE_URL).buildUpon()
+                .appendEncodedPath(movieId)
+                .appendEncodedPath(API_ENDPOINT_REVIEWS)
                 .appendQueryParameter(API_LANGUAGE_PARAM, API_LANGUAGE)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
