@@ -2,12 +2,17 @@ package com.example.android.popularmovies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -60,13 +65,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    Start Url
-                    review.getUrl()
-                    Intent intent = new Intent(mContext, MovieDetailActivity.class);
-                    intent.putExtra(INTENT_MOVIE, movie);
-                    mContext.startActivity(intent);
-                    */
+                    Intent reviewIntent = new Intent(Intent.ACTION_VIEW);
+                    reviewIntent.setData(Uri.parse(review.getUrl()));
+
+                    // Verify it resolves
+                    PackageManager packageManager = mContext.getPackageManager();
+                    List<ResolveInfo> activities = packageManager.queryIntentActivities(reviewIntent, 0);
+                    boolean isIntentSafe = activities.size() > 0;
+
+                    // Start an activity if it's safe
+                    if (isIntentSafe) {
+                        mContext.startActivity(reviewIntent);
+                    } else {
+                        Toast.makeText(mContext, R.string.no_apps_review, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
