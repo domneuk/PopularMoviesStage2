@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="movie_overview_item_image_height">185dp</dimen>
+    <dimen name="movie_overview_item_image_height">278dp</dimen>
     <dimen name="trailer_image_width">180dp</dimen>
     <dimen name="trailer_image_height">100dp</dimen>
     <dimen name="play_icon_size">96dp</dimen>
