@@ -16,6 +16,9 @@ public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
+    private static final int REQUEST_CONNECT_TIMEOUT = 5000;
+    private static final int REQUEST_READ_TIMEOUT = 10000;
+
     private final static String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     private final static String API_ENDPOINT_TOP_RATED = "top_rated";
@@ -165,6 +168,8 @@ public final class NetworkUtils {
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(REQUEST_CONNECT_TIMEOUT);
+        urlConnection.setReadTimeout(REQUEST_READ_TIMEOUT);
         try {
             InputStream in = urlConnection.getInputStream();
 
